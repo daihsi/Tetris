@@ -34,23 +34,59 @@ let tetro = [
 let tetro_x = 0;
 let tetro_y = 0;
 
+
+//フィールド本体
+let filed = [];
+
+//初期化の関数
+function init() {
+
+  //フィールドのクリア
+  for (let y = 0; y < FIELD_H; y++) {
+    filed[y] = [];
+    for (let x = 0; x < FIELD_W; x++) {
+      filed[y][x] = 0;
+    }
+  }  
+}
+
+init();
+drawFiled();
 drawTetro();
+
+//ブロックを表示する
+function drawBlock(x, y) {
+  let px = x * BLOCK_SIZE;
+  let py = y * BLOCK_SIZE;
+  context.fillStyle = "red";
+  context.fillRect(px, py, BLOCK_SIZE, BLOCK_SIZE);
+  context.strokeStyle = "black";
+  context.strokeRect(px, py, BLOCK_SIZE, BLOCK_SIZE);
+}
+
+//フィールドを表示する
+function drawFiled() {
+
+  context.clearRect(0, 0, SCREEN_W, SCREEN_H);
+
+  //繰り返して、多次元配列の値が1に該当すれば条件分岐に入る
+  for (let y = 0; y < FIELD_H; y++) {
+    for (let x = 0; x < FIELD_W; x++) {
+      if (filed[y][x]) {
+        drawBlock(x, y);
+      }
+    }
+  }
+}
 
 //テトロミノを表示する
 function drawTetro() {
-
-  context.clearRect(0, 0, SCREEN_W, SCREEN_H);
 
   //繰り返して、多次元配列の値が1に該当すれば条件分岐に入る
   for (let y = 0; y < TETRO_SIZE; y++) {
     for (let x = 0; x < TETRO_SIZE; x++) {
       if (tetro[y][x]) {
-        let px = (tetro_x + x) * BLOCK_SIZE;
-        let py = (tetro_y + y) * BLOCK_SIZE;
-        context.fillStyle = "red";
-        context.fillRect(px, py, BLOCK_SIZE, BLOCK_SIZE);
-        context.strokeStyle = "black";
-        context.strokeRect(px, py, BLOCK_SIZE, BLOCK_SIZE);
+        drawBlock(tetro_x + x, tetro_y + y);
       }
     }
   }
@@ -79,5 +115,6 @@ document.onkeydown = event => {
     case "Space":
       break;
   }
+  drawFiled();
   drawTetro();
 }
